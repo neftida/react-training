@@ -1,22 +1,21 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-grid-system';
-import PropTypes from 'prop-types'
 import EventsList from './EventsList'
 import events from './data/events'
 
 class Events extends React.Component {
 
     render() {
-        const futureEvents = events.map(event => {
-            const date = new Date(event.date);
+        const futureEvents = events.filter(item => {
+            const date = new Date(item.date);
             if (date >= Date.now()) {
-                return event;
+                return item;
             }
         });
-        const pastEvents = events.map(event => {
-            const date = new Date(event.date);
+        const pastEvents = events.filter(item => {
+            const date = new Date(item.date);
             if (date < Date.now()) {
-                return event;
+                return item;
             }
         });
         return (

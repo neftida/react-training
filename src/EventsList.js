@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-
+import EventItem from './EventItem'
 
 class EventsList extends React.Component {
 
@@ -8,21 +8,57 @@ class EventsList extends React.Component {
         events: PropTypes.array.isRequired
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            events: []
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState((prevState, props) => {
+                return {
+                    events: this.props.events
+                }
+            })
+        }, 500);
+    }
+
+    clearListOnClick = (event) => {
+        event.preventDefault();
+        this.setState((prevState, props) => {
+            return {
+                events: []
+            }
+        });
+    }
+
+    removeElement(id, event) {
+        event.preventDefault();
+        let updatedEvents = this.state.events.filter(event => {
+            return event.id !== id;
+        });
+        this.setState((prevState, props) => {
+            return {
+                events: updatedEvents
+            }
+        });
+    }
+
     render() {
-        let events = this.props.events;
+        let events = this.state.events;
         return (
-            <ul className="list-group">
-                {events.map(event => {
-                    if (event) {
+            <div>
+                <ul className="list-group">
+                    {events.map(item => {
                         return (
-                            <li className="list-group-item" key={event.id}>
-                                <h4>{event.name}</h4>
-                                {event.place}, {event.date}, {event.time}
-                            </li>
+                            <EventItem key={item.id} item={item} onItemRemove={this.removeElement.bind(this)} />                            
                         )
-                    }
-                })}
-            </ul>
+                    })}
+                </ul>
+                <a className="btn btn-default" href="/" onClick={this.clearListOnClick}>Clear list</a>
+            </div>
         )
     }
 
