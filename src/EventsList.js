@@ -11,18 +11,18 @@ class EventsList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            events: []
-        }
+            events: this.props.events
+        };
     }
 
-    componentDidMount() {
-        setTimeout(() => {
+    componentWillReceiveProps(nextProps) {
+        if (this.props != nextProps) {
             this.setState((prevState, props) => {
                 return {
-                    events: this.props.events
+                    events: nextProps.events
                 }
-            })
-        }, 500);
+            });
+        }
     }
 
     clearListOnClick = (event) => {
@@ -47,13 +47,12 @@ class EventsList extends React.Component {
     }
 
     render() {
-        let events = this.state.events;
         return (
             <div>
                 <ul className="list-group">
-                    {events.map(item => {
+                    {this.state.events.map(item => {
                         return (
-                            <EventItem key={item.id} item={item} onItemRemove={this.removeElement.bind(this)} />                            
+                            <EventItem key={item.id} item={item} onItemRemove={this.removeElement.bind(this)} />
                         )
                     })}
                 </ul>
